@@ -1,0 +1,4 @@
+"""
+Legal Assistant - Core Modules
+"""
+

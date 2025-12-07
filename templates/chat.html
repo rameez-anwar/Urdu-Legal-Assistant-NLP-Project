@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal Assistant - Roman Urdu Legal Chatbot</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .chat-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            display: flex;
+            height: calc(100vh - 40px);
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 300px;
+            background: #f8f9fa;
+            border-right: 1px solid #e9ecef;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .main-chat {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .chat-header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .chat-header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message.bot {
+            justify-content: flex-start;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 15px 20px;
+            border-radius: 20px;
+            position: relative;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message.bot .message-content {
+            background: white;
+            color: #333;
+            border: 1px solid #e9ecef;
+            border-bottom-left-radius: 5px;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 10px;
+            font-size: 18px;
+        }
+
+        .message.user .message-avatar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .message.bot .message-avatar {
+            background: #28a745;
+            color: white;
+        }
+
+        .chat-input {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .chat-input input:focus {
+            border-color: #667eea;
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.2s;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .sidebar-section {
+            margin-bottom: 30px;
+        }
+
+        .sidebar-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 5px;
+        }
+
+        .sample-question {
+            background: white;
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .sample-question:hover {
+            background: #667eea;
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .category-item {
+            background: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border-left: 4px solid #667eea;
+            font-size: 14px;
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 15px 20px;
+            background: white;
+            border-radius: 20px;
+            border: 1px solid #e9ecef;
+            margin-bottom: 20px;
+            align-self: flex-start;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 5px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #667eea;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        .response-section {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .response-section h4 {
+            color: #667eea;
+            margin-bottom: 8px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .response-section p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .response-content {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #333;
+            margin-top: 8px;
+        }
+
+        .response-content strong {
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .response-content em {
+            font-style: italic;
+            color: #555;
+        }
+
+        .response-content ol,
+        .response-content ul {
+            margin: 10px 0;
+            padding-left: 25px;
+        }
+
+        .response-content li {
+            margin: 5px 0;
+            line-height: 1.6;
+        }
+
+        .response-content h1,
+        .response-content h2,
+        .response-content h3 {
+            margin: 15px 0 10px 0;
+            color: #667eea;
+        }
+
+        .status-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            border-radius: 25px;
+            color: white;
+            font-size: 14px;
+            z-index: 1000;
+        }
+
+        .status-connected {
+            background: #28a745;
+        }
+
+        .status-disconnected {
+            background: #dc3545;
+        }
+
+        @media (max-width: 768px) {
+            .chat-container {
+                margin: 10px;
+                height: calc(100vh - 20px);
+            }
+            
+            .sidebar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="status-indicator" id="statusIndicator">
+        <i class="fas fa-circle"></i> Connecting...
+    </div>
+
+    <div class="chat-container">
+        <div class="sidebar">
+            <div class="sidebar-section">
+                <h3><i class="fas fa-lightbulb"></i> Sample Questions</h3>
+                <div id="sampleQuestions"></div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3><i class="fas fa-gavel"></i> Legal Categories</h3>
+                <div id="categories"></div>
+            </div>
+        </div>
+
+        <div class="main-chat">
+            <div class="chat-header">
+                <h1><i class="fas fa-balance-scale"></i> Legal Assistant</h1>
+                <p>Roman Urdu Legal Guidance Chatbot</p>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <strong>Legal Assistant:</strong><br>
+                        Assalam-o-alaikum! Main aap ki legal guidance ke liye hazir hun. 
+                        Apne sawal Roman Urdu mein pooch sakte hain. Kya aap ko koi legal masla hai?
+                    </div>
+                </div>
+            </div>
+
+            <div class="typing-indicator" id="typingIndicator">
+                <div class="typing-dots">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            </div>
+
+            <div class="chat-input">
+                <div class="input-container">
+                    <input type="text" id="messageInput" placeholder="Apna sawal yahan likhein..." autocomplete="off">
+                    <button class="send-btn" id="sendBtn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+        let sessionId = localStorage.getItem('sessionId') || generateSessionId();
+        localStorage.setItem('sessionId', sessionId);
+
+        function generateSessionId() {
+            return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        const socket = io();
+        const chatMessages = document.getElementById('chatMessages');
+        const messageInput = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const statusIndicator = document.getElementById('statusIndicator');
+
+        // Load sample questions
+        fetch('/api/sample-questions')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('sampleQuestions');
+                data.questions.forEach(question => {
+                    const div = document.createElement('div');
+                    div.className = 'sample-question';
+                    div.textContent = question;
+                    div.onclick = () => sendMessage(question);
+                    container.appendChild(div);
+                });
+            });
+
+        // Load categories
+        fetch('/api/categories')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('categories');
+                Object.entries(data.categories).forEach(([key, category]) => {
+                    const div = document.createElement('div');
+                    div.className = 'category-item';
+                    div.textContent = category.name;
+                    container.appendChild(div);
+                });
+            });
+
+        function addMessage(content, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.innerHTML = isUser ? '<i class="fas fa-user"></i>' : '<i class="fas fa-robot"></i>';
+            
+            const messageContent = document.createElement('div');
+            messageContent.className = 'message-content';
+            
+            if (isUser) {
+                messageContent.innerHTML = `<strong>You:</strong><br>${content}`;
+            } else {
+                messageContent.innerHTML = formatBotResponse(content);
+            }
+            
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(messageContent);
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function formatMarkdown(text) {
+            if (!text) return '';
+            
+            // Escape HTML first
+            let html = text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+            
+            // Convert markdown to HTML
+            // Bold: **text** 
+            html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+            
+            // Process lists first (before line breaks)
+            const lines = html.split('\n');
+            let result = [];
+            let inNumberedList = false;
+            let inBulletList = false;
+            let numberedItems = [];
+            let bulletItems = [];
+            
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) {
+                    // Empty line - close any open lists
+                    if (inNumberedList && numberedItems.length > 0) {
+                        result.push('<ol>' + numberedItems.join('') + '</ol>');
+                        numberedItems = [];
+                        inNumberedList = false;
+                    }
+                    if (inBulletList && bulletItems.length > 0) {
+                        result.push('<ul>' + bulletItems.join('') + '</ul>');
+                        bulletItems = [];
+                        inBulletList = false;
+                    }
+                    result.push('');
+                    continue;
+                }
+                
+                // Check for numbered list (1., 2., etc.) - must start with number and space
+                // Avoid matching things like "1.1" or "Section 1." or duplicate "1. 1."
+                const numberedMatch = line.match(/^(\d+)\.\s+(.+)$/);
+                if (numberedMatch && !line.match(/^\d+\.\d+/) && !line.match(/^\d+\.\s+\d+\./)) {
+                    // Check if this item already exists (avoid duplicates)
+                    const itemText = numberedMatch[2].trim();
+                    const isDuplicate = numberedItems.some(item => {
+                        const existingText = item.replace(/<\/?li>/g, '').trim();
+                        return existingText === itemText || existingText.includes(itemText) || itemText.includes(existingText);
+                    });
+                    
+                    if (!isDuplicate) {
+                        // Close bullet list if open
+                        if (inBulletList && bulletItems.length > 0) {
+                            result.push('<ul>' + bulletItems.join('') + '</ul>');
+                            bulletItems = [];
+                            inBulletList = false;
+                        }
+                        inNumberedList = true;
+                        numberedItems.push('<li>' + itemText + '</li>');
+                    }
+                    continue;
+                }
+                
+                // Check for bullet list (- or *)
+                const bulletMatch = line.match(/^[-*]\s+(.+)$/);
+                if (bulletMatch) {
+                    // Close numbered list if open
+                    if (inNumberedList && numberedItems.length > 0) {
+                        result.push('<ol>' + numberedItems.join('') + '</ol>');
+                        numberedItems = [];
+                        inNumberedList = false;
+                    }
+                    inBulletList = true;
+                    bulletItems.push('<li>' + bulletMatch[1] + '</li>');
+                    continue;
+                }
+                
+                // Regular line - close any open lists first
+                if (inNumberedList && numberedItems.length > 0) {
+                    result.push('<ol>' + numberedItems.join('') + '</ol>');
+                    numberedItems = [];
+                    inNumberedList = false;
+                }
+                if (inBulletList && bulletItems.length > 0) {
+                    result.push('<ul>' + bulletItems.join('') + '</ul>');
+                    bulletItems = [];
+                    inBulletList = false;
+                }
+                
+                // Add regular line
+                result.push(line);
+            }
+            
+            // Close any remaining lists
+            if (inNumberedList && numberedItems.length > 0) {
+                result.push('<ol>' + numberedItems.join('') + '</ol>');
+            }
+            if (inBulletList && bulletItems.length > 0) {
+                result.push('<ul>' + bulletItems.join('') + '</ul>');
+            }
+            
+            html = result.join('<br>');
+            
+            // Headers (after list processing)
+            html = html.replace(/^### (.*$)/gm, '<h3>$1</h3>');
+            html = html.replace(/^## (.*$)/gm, '<h2>$1</h2>');
+            html = html.replace(/^# (.*$)/gm, '<h1>$1</h1>');
+            
+            return html;
+        }
+
+        function formatBotResponse(response) {
+            let html = '<strong>Legal Assistant:</strong><br><br>';
+            
+            if (response.explanation) {
+                html += `<div class="response-section">
+                    <h4><i class="fas fa-lightbulb"></i> Explanation</h4>
+                    <div class="response-content">${formatMarkdown(response.explanation)}</div>
+                </div>`;
+            }
+            
+            if (response.practical_steps) {
+                html += `<div class="response-section">
+                    <h4><i class="fas fa-list"></i> Practical Steps</h4>
+                    <div class="response-content">${formatMarkdown(response.practical_steps)}</div>
+                </div>`;
+            }
+            
+            if (response.when_to_consult_lawyer) {
+                html += `<div class="response-section">
+                    <h4><i class="fas fa-gavel"></i> When to Consult a Lawyer</h4>
+                    <div class="response-content">${formatMarkdown(response.when_to_consult_lawyer)}</div>
+                </div>`;
+            }
+            
+            if (response.disclaimers) {
+                html += `<div class="response-section">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Disclaimer</h4>
+                    <div class="response-content">${formatMarkdown(response.disclaimers)}</div>
+                </div>`;
+            }
+            
+            return html;
+        }
+
+        function sendMessage(message) {
+            if (!message.trim()) return;
+            
+            addMessage(message, true);
+            messageInput.value = '';
+            
+            // Show typing indicator
+            typingIndicator.style.display = 'block';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Send to server
+            fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: message,
+                    session_id: sessionId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Hide typing indicator
+                typingIndicator.style.display = 'none';
+                
+                if (data.success) {
+                    addMessage(data.response, false);
+                } else {
+                    addMessage('Sorry, main aap ke sawal ka jawab nahi de sakta. Please try again.', false);
+                }
+            })
+            .catch(error => {
+                typingIndicator.style.display = 'none';
+                addMessage('Connection error. Please check your internet connection.', false);
+            });
+        }
+
+        // Event listeners
+        sendBtn.addEventListener('click', () => {
+            sendMessage(messageInput.value);
+        });
+
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage(messageInput.value);
+            }
+        });
+
+        // Socket events
+        socket.on('connect', () => {
+            statusIndicator.className = 'status-indicator status-connected';
+            statusIndicator.innerHTML = '<i class="fas fa-circle"></i>';
+        });
+
+        socket.on('disconnect', () => {
+            statusIndicator.className = 'status-indicator status-disconnected';
+            statusIndicator.innerHTML = '<i class="fas fa-circle"></i> Disconnected';
+        });
+
+        socket.on('status', (data) => {
+            console.log('Status:', data.message);
+        });
+    </script>
+</body>
+</html> 
