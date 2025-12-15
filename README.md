@@ -76,9 +76,9 @@ DATABASE_URL=sqlite:///./urdu_legal.db
 Legal Assistant Chatbot/
 ├── chatbot_app.py           # Flask web app (main entry point)
 ├── app/                      # Application Layer
-│   ├── main.py              # CLI interface
 │   ├── api_server.py        # FastAPI REST API
-│   └── setup_data.py        # Data setup script
+│   ├── setup_data.py        # Data setup script
+│   └── evaluate.py          # Evaluation script
 ├── src/                      # Core Modules
 │   ├── config.py            # Configuration
 │   ├── database.py          # Database operations
@@ -111,18 +111,7 @@ python chatbot_app.py
 
 Then open your browser and go to: `http://localhost:5000`
 
-### Option 2: CLI Interface
-
-```bash
-python app/main.py
-```
-
-Choose from:
-1. Interactive Mode (CLI)
-2. Demo Mode (Sample Questions)
-3. Start API Server
-
-### Option 3: REST API
+### Option 2: REST API
 
 ```bash
 python app/api_server.py
@@ -294,9 +283,7 @@ This project is for educational purposes as part of NLP Lab coursework.
 
 ## Authors
 
-- Rameez Anwar (B22F01050Ai102)
-- Muhammad Azeem Tanoli
-- Abdul Moiz Haseeb
+- Rameez Anwar
 
 ## Acknowledgments
 
@@ -304,10 +291,6 @@ This project is for educational purposes as part of NLP Lab coursework.
 - Hugging Face for transformer models
 - FAISS for efficient similarity search
 - Pakistani legal system documentation
-
-##  Support
-
-For issues or questions, please refer to the project documentation or contact the development team.
 
 ---
 

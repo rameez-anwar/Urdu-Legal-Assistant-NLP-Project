@@ -1,9 +1,3 @@
-#!/usr/bin/env python3
-"""
-RAG (Retrieval-Augmented Generation) Model for Roman Urdu Legal Assistant
-Combines document retrieval with AI generation
-"""
-
 import os
 import logging
 from typing import List, Dict, Optional
@@ -43,7 +37,7 @@ class RAGLegalAssistant:
         if not self.retriever.load_index():
             logger.warning("No existing index found. Please build index first.")
         
-        logger.info("✅ RAG assistant initialized")
+        logger.info("RAG assistant initialized")
     
     def retrieve_relevant_documents(self, query: str) -> List[Dict]:
         """Retrieve relevant documents for a query"""
@@ -242,7 +236,7 @@ Please provide a helpful, practical response in Roman Urdu based on the retrieve
         try:
             logger.info("Building FAISS index from documents...")
             self.retriever.build_index_from_documents(documents, self.embedding_generator)
-            logger.info("✅ Index built successfully")
+            logger.info("Index built successfully")
         except Exception as e:
             logger.error(f"Error building index: {str(e)}")
 

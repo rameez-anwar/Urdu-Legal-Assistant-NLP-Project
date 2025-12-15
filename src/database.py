@@ -1,8 +1,3 @@
-#!/usr/bin/env python3
-"""
-Database operations for Legal Assistant Legal Guidance System
-"""
-
 import sqlite3
 import json
 import logging
@@ -87,13 +82,13 @@ class LegalDatabase:
                 ''')
                 
                 conn.commit()
-                logger.info("✅ Database tables initialized successfully")
+                logger.info("Database tables initialized successfully")
                 
                 # Initialize FAQ data if table is empty
                 self._initialize_faq_data()
                 
         except Exception as e:
-            logger.error(f"❌ Database initialization failed: {str(e)}")
+            logger.error(f"Database initialization failed: {str(e)}")
             raise
     
     def _initialize_faq_data(self):
@@ -180,10 +175,10 @@ class LegalDatabase:
                         ))
                     
                     conn.commit()
-                    logger.info(f"✅ Initialized {len(faq_data)} FAQ entries")
+                    logger.info(f"Initialized {len(faq_data)} FAQ entries")
                 
         except Exception as e:
-            logger.error(f"❌ FAQ initialization failed: {str(e)}")
+            logger.error(f"FAQ initialization failed: {str(e)}")
     
     def save_conversation(self, session_id: str, question: str, response: Dict, category: str = None) -> bool:
         """Save conversation to database"""
@@ -209,11 +204,11 @@ class LegalDatabase:
                 ))
                 
                 conn.commit()
-                logger.info(f"✅ Conversation saved for session {session_id}")
+                logger.info(f"Conversation saved for session {session_id}")
                 return True
                 
         except Exception as e:
-            logger.error(f"❌ Failed to save conversation: {str(e)}")
+            logger.error(f"Failed to save conversation: {str(e)}")
             return False
     
     def get_conversation_history(self, session_id: str, limit: int = 10) -> List[Dict]:
@@ -242,7 +237,7 @@ class LegalDatabase:
                 return conversations
                 
         except Exception as e:
-            logger.error(f"❌ Failed to get conversation history: {str(e)}")
+            logger.error(f"Failed to get conversation history: {str(e)}")
             return []
     
     def search_faq(self, query: str, category: str = None) -> List[Dict]:
@@ -288,7 +283,7 @@ class LegalDatabase:
                 return results
                 
         except Exception as e:
-            logger.error(f"❌ Failed to search FAQ: {str(e)}")
+            logger.error(f"Failed to search FAQ: {str(e)}")
             return []
     
     def get_faq_by_category(self, category: str) -> List[Dict]:
@@ -317,7 +312,7 @@ class LegalDatabase:
                 return results
                 
         except Exception as e:
-            logger.error(f"❌ Failed to get FAQ by category: {str(e)}")
+            logger.error(f"Failed to get FAQ by category: {str(e)}")
             return []
     
     def save_faq(self, category: str, subcategory: str, question: str, answer: str, keywords: str = None) -> bool:
@@ -332,11 +327,11 @@ class LegalDatabase:
                 ''', (category, subcategory, question, answer, keywords))
                 
                 conn.commit()
-                logger.info(f"✅ FAQ saved: {question[:50]}...")
+                logger.info(f"FAQ saved: {question[:50]}...")
                 return True
                 
         except Exception as e:
-            logger.error(f"❌ Failed to save FAQ: {str(e)}")
+            logger.error(f"Failed to save FAQ: {str(e)}")
             return False
     
     def update_user_feedback(self, conversation_id: int, feedback: int) -> bool:
@@ -355,7 +350,7 @@ class LegalDatabase:
                 return True
                 
         except Exception as e:
-            logger.error(f"❌ Failed to update feedback: {str(e)}")
+            logger.error(f"Failed to update feedback: {str(e)}")
             return False
     
     def get_statistics(self) -> Dict:
@@ -393,7 +388,7 @@ class LegalDatabase:
                 }
                 
         except Exception as e:
-            logger.error(f"❌ Failed to get statistics: {str(e)}")
+            logger.error(f"Failed to get statistics: {str(e)}")
             return {}
     
     def get_top_faqs(self, limit: int = 5) -> List[Dict]:
@@ -422,5 +417,5 @@ class LegalDatabase:
                 return results
                 
         except Exception as e:
-            logger.error(f"❌ Failed to get top FAQs: {str(e)}")
+            logger.error(f"Failed to get top FAQs: {str(e)}")
             return [] 

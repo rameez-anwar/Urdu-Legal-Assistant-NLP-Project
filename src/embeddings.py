@@ -1,9 +1,3 @@
-#!/usr/bin/env python3
-"""
-Embedding Generation Module for Roman Urdu Legal Assistant
-Uses transformer models to generate semantic embeddings
-"""
-
 import os
 import numpy as np
 import logging
@@ -21,16 +15,7 @@ class LegalEmbeddingGenerator:
     """Generate embeddings for legal documents using transformer models"""
     
     def __init__(self, model_name: str = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"):
-        """
-        Initialize embedding generator
-        
-        Args:
-            model_name: Hugging Face model name
-            Options:
-            - paraphrase-multilingual-MiniLM-L12-v2 (fast, multilingual)
-            - sentence-transformers/paraphrase-multilingual-mpnet-base-v2 (better quality)
-            - bert-base-multilingual-cased (standard BERT)
-        """
+
         self.model_name = model_name
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         logger.info(f"Using device: {self.device}")
@@ -39,7 +24,7 @@ class LegalEmbeddingGenerator:
             # Use sentence-transformers for easier usage
             self.model = SentenceTransformer(model_name, device=self.device)
             self.use_sentence_transformers = True
-            logger.info(f"✅ Loaded SentenceTransformer model: {model_name}")
+            logger.info(f"Loaded SentenceTransformer model: {model_name}")
         except Exception as e:
             logger.warning(f"Failed to load SentenceTransformer, trying transformers: {str(e)}")
             try:
@@ -47,7 +32,7 @@ class LegalEmbeddingGenerator:
                 self.tokenizer = AutoTokenizer.from_pretrained(model_name)
                 self.model = AutoModel.from_pretrained(model_name).to(self.device)
                 self.use_sentence_transformers = False
-                logger.info(f"✅ Loaded transformers model: {model_name}")
+                logger.info(f"Loaded transformers model: {model_name}")
             except Exception as e2:
                 logger.error(f"Failed to load model: {str(e2)}")
                 raise
@@ -138,7 +123,7 @@ class LegalEmbeddingGenerator:
                             segment['embedding'] = embeddings[idx].tolist()
                             break
             
-            logger.info("✅ Embeddings added to documents")
+            logger.info("Embeddings added to documents")
             return documents
             
         except Exception as e:

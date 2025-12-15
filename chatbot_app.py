@@ -1,9 +1,3 @@
-#!/usr/bin/env python3
-"""
-Beautiful Chatbot Web Application for Legal Assistant
-Roman Urdu Legal Guidance System
-"""
-
 import os
 import sys
 import json
@@ -57,10 +51,10 @@ def initialize_services():
         try:
             rag_model = RAGLegalAssistant()
             gemini_service = GeminiLegalService(db=db, rag_model=rag_model)
-            logger.info("✅ RAG model initialized (with document retrieval)")
+            logger.info("RAG model initialized (with document retrieval)")
         except Exception as e:
-            logger.warning(f"⚠️  RAG model not available: {str(e)}")
-            logger.info("📝 Using FAQ-based mode only")
+            logger.warning(f"RAG model not available: {str(e)}")
+            logger.info("Using FAQ-based mode only")
             gemini_service = GeminiLegalService(db=db)
         
         # Test connection
@@ -201,19 +195,18 @@ def handle_connect():
 @socketio.on('disconnect')
 def handle_disconnect():
     """Handle client disconnection"""
-    print('Client disconnected')
+    logger.info('Client disconnected')
 
 if __name__ == '__main__':
     # Initialize services
     success, message = initialize_services()
     
     if success:
-        print("✅ Services initialized successfully!")
-        print("🚀 Starting Legal Assistant Chatbot...")
-        print("📱 Open your browser and go to: http://localhost:5000")
+        logger.info("Services initialized successfully")
+        logger.info("Starting Legal Assistant Chatbot on http://localhost:5000")
         
         # Run the app
         socketio.run(app, host='0.0.0.0', port=5000, debug=True)
     else:
-        print(f"❌ Failed to initialize services: {message}")
-        print("🔑 Please check your .env file and API key") 
+        logger.error(f"Failed to initialize services: {message}")
+        logger.error("Please check your .env file and API key") 

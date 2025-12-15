@@ -1,9 +1,3 @@
-#!/usr/bin/env python3
-"""
-FAISS-based Retrieval Module for Roman Urdu Legal Assistant
-Handles semantic search over legal document embeddings
-"""
-
 import os
 import json
 import numpy as np
@@ -209,7 +203,7 @@ class LegalDocumentRetriever:
             # Save index
             self.save_index()
             
-            logger.info("✅ Index built and saved successfully")
+            logger.info("Index built and saved successfully")
             
         except Exception as e:
             logger.error(f"Error building index: {str(e)}")

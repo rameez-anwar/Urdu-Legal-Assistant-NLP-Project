@@ -1,9 +1,3 @@
-#!/usr/bin/env python3
-"""
-Evaluation Script for Legal Assistant Chatbot
-Measures accuracy, response quality, and performance metrics
-"""
-
 import os
 import sys
 import time
@@ -26,7 +20,7 @@ try:
     ROUGE_AVAILABLE = True
 except ImportError:
     ROUGE_AVAILABLE = False
-    print("⚠️  rouge-score not installed. Install with: pip install rouge-score")
+    print("rouge-score not installed. Install with: pip install rouge-score")
 
 try:
     from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
@@ -34,7 +28,7 @@ try:
     BLEU_AVAILABLE = True
 except ImportError:
     BLEU_AVAILABLE = False
-    print("⚠️  nltk not installed. Install with: pip install nltk")
+    print("nltk not installed. Install with: pip install nltk")
 
 try:
     from sentence_transformers import SentenceTransformer

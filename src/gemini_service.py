@@ -1,9 +1,3 @@
-#!/usr/bin/env python3
-"""
-Google Gemini API Service for Legal Assistant
-Handles AI interactions for legal guidance in both Urdu script and Roman Urdu
-"""
-
 import os
 import sys
 import json
@@ -29,9 +23,9 @@ class GeminiLegalService:
             self.chat = None
             self.db = db
             self.rag_model = rag_model  # Optional RAG model for enhanced responses
-            logger.info("✅ Gemini service initialized")
+            logger.info("Gemini service initialized")
         except Exception as e:
-            logger.error(f"❌ Failed to initialize Gemini service: {str(e)}")
+            logger.error(f"Failed to initialize Gemini service: {str(e)}")
             raise
     
     def test_connection(self) -> bool:
@@ -40,7 +34,7 @@ class GeminiLegalService:
             response = self.model.generate_content("Hello")
             return True
         except Exception as e:
-            logger.error(f"❌ Gemini connection test failed: {str(e)}")
+            logger.error(f"Gemini connection test failed: {str(e)}")
             return False
     
     def get_legal_guidance(self, question: str, category: str = None) -> Dict:
@@ -85,7 +79,7 @@ class GeminiLegalService:
             }
             
         except Exception as e:
-            logger.error(f"❌ Error getting legal guidance: {str(e)}")
+            logger.error(f"Error getting legal guidance: {str(e)}")
             return {
                 "success": False,
                 "error": str(e),
@@ -150,7 +144,7 @@ class GeminiLegalService:
             faq_results = self.db.search_faq(question)
             return faq_results
         except Exception as e:
-            logger.error(f"❌ FAQ search failed: {str(e)}")
+            logger.error(f"FAQ search failed: {str(e)}")
             return []
     
     def _is_roman_urdu(self, text: str) -> bool:
@@ -276,7 +270,7 @@ Please provide a helpful, practical response in Roman Urdu."""
             }
             
         except Exception as e:
-            logger.error(f"❌ Error parsing response: {str(e)}")
+            logger.error(f"Error parsing response: {str(e)}")
             # Return the full response as explanation if parsing fails
             return {
                 "explanation": response_text,
@@ -528,7 +522,7 @@ Please provide a helpful, practical response in Roman Urdu."""
             }
             
         except Exception as e:
-            logger.error(f"❌ Error enhancing FAQ response: {str(e)}")
+            logger.error(f"Error enhancing FAQ response: {str(e)}")
             # Fallback to direct FAQ response
             return self._get_direct_faq_response(faq_result, original_question, is_roman_urdu)
     
@@ -692,7 +686,7 @@ Example: Agar FAQ mein "90 din ka period" hai to ise emphasize karein aur explai
             }
             
         except Exception as e:
-            logger.error(f"❌ Error parsing FAQ response: {str(e)}")
+            logger.error(f"Error parsing FAQ response: {str(e)}")
             return {
                 "success": True,
                 "question": original_question,
@@ -799,7 +793,7 @@ Example: Agar FAQ mein "90 din ka period" hai to ise emphasize karein aur explai
             }
             
         except Exception as e:
-            logger.error(f"❌ Error parsing FAQ answer: {str(e)}")
+            logger.error(f"Error parsing FAQ answer: {str(e)}")
             return {
                 "explanation": self._clean_response_text(faq_answer),
                 "practical_steps": "",

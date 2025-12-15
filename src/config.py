@@ -1,8 +1,3 @@
-#!/usr/bin/env python3
-"""
-Configuration settings for Legal Assistant - Roman Urdu Legal Guidance System
-"""
-
 import os
 from datetime import datetime
 from dotenv import load_dotenv
@@ -160,14 +155,14 @@ DATABASE_URL=sqlite:///./urdu_legal.db
 """
         with open(env_file, "w", encoding="utf-8") as f:
             f.write(env_content)
-        print("✅ .env file created!")
-        print("🔑 Please add your Gemini API key to .env file")
+        print(".env file created!")
+        print("Please add your Gemini API key to .env file")
     else:
-        print("✅ .env file already exists")
+        print(".env file already exists")
 
 # Test configuration
 if __name__ == "__main__":
-    print("🔧 Testing Legal Assistant Configuration...")
+    print("Testing Legal Assistant Configuration...")
     
     # Create .env template
     create_env_template()
@@ -176,11 +171,11 @@ if __name__ == "__main__":
     is_valid, message = Config.validate_config()
     
     if is_valid:
-        print("✅ Configuration is valid!")
-        print(f"📱 App Name: {Config.APP_NAME}")
-        print(f"🤖 Model: {Config.GEMINI_MODEL}")
-        print(f"📊 Categories: {len(Config.LEGAL_CATEGORIES)}")
-        print(f"📝 Sample Questions: {len(Config.SAMPLE_QUESTIONS)}")
+        print("Configuration is valid!")
+        print(f"App Name: {Config.APP_NAME}")
+        print(f"Model: {Config.GEMINI_MODEL}")
+        print(f"Categories: {len(Config.LEGAL_CATEGORIES)}")
+        print(f"Sample Questions: {len(Config.SAMPLE_QUESTIONS)}")
     else:
-        print(f"❌ Configuration error: {message}")
-        print("🔑 Please add your GEMINI_API_KEY to .env file") 
+        print(f"Configuration error: {message}")
+        print("Please add your GEMINI_API_KEY to .env file") 

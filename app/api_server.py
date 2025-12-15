@@ -1,8 +1,3 @@
-"""
-FastAPI Server for Urdu Legal Guidance System
-Provides REST API endpoints for the Android app
-"""
-
 import os
 import sys
 
@@ -96,17 +91,17 @@ async def startup_event():
     try:
         # Initialize database
         db.init_database()
-        logger.info("✅ Database initialized")
+        logger.info("Database initialized")
         
         # Test Gemini service
         gemini = get_gemini_service()
         if gemini.test_connection():
-            logger.info("✅ Gemini service connected")
+            logger.info("Gemini service connected")
         else:
-            logger.error("❌ Gemini service connection failed")
+            logger.error("Gemini service connection failed")
             
     except Exception as e:
-        logger.error(f"❌ Startup failed: {str(e)}")
+        logger.error(f"Startup failed: {str(e)}")
 
 @app.get("/")
 async def root():
@@ -281,8 +276,8 @@ if __name__ == "__main__":
     from src.config import create_env_template
     create_env_template()
     
-    print("🚀 Starting Legal Assistant API Server...")
-    print("📝 Make sure to set your GEMINI_API_KEY in .env file")
+    print("Starting Legal Assistant API Server...")
+    print("Make sure to set your GEMINI_API_KEY in .env file")
     
     uvicorn.run(
         "api_server:app",

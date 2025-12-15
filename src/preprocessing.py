@@ -1,9 +1,3 @@
-#!/usr/bin/env python3
-"""
-Data Preprocessing Module for Roman Urdu Legal Assistant
-Handles text extraction, cleaning, tokenization, and augmentation
-"""
-
 import os
 import re
 import json
